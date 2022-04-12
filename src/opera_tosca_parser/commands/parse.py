@@ -33,10 +33,11 @@ def add_parser(subparsers: argparse._SubParsersAction):
     parser.set_defaults(func=_parser_callback)
 
 
-def _parser_callback(args: argparse.Namespace):
+def _parser_callback(args: argparse.Namespace) -> int:
     """
     Parser callback function
     :param args: Supplied arguments
+    :return: Exit code - 0 if parsing successful or 1 if not
     """
     try:
         inputs = yaml.safe_load(args.inputs) if args.inputs else {}
