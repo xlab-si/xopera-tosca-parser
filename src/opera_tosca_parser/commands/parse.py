@@ -49,12 +49,8 @@ def _parser_callback(args: argparse.Namespace):
         csar_or_st_path = PurePath(args.csar_or_service_template)
 
     try:
-        if is_zipfile(csar_or_st_path) or Path(csar_or_st_path).is_dir():
-            print("Parsing TOSCA CSAR...")
-            parse_csar(csar_or_st_path, inputs)
-        else:
-            print("Parsing TOSCA service template...")
-            parse_service_template(csar_or_st_path, inputs)
+        print("Parsing TOSCA CSAR or service template...")
+        parse(csar_or_st_path, inputs)
         print("Done.")
     except ParseError as e:
         print(f"{e.loc}: {e}")
@@ -64,6 +60,18 @@ def _parser_callback(args: argparse.Namespace):
         return 1
 
     return 0
+
+
+def parse(csar_or_st_path: PurePath, inputs: typing.Optional[dict]):
+    """
+    Parse TOSCA CSAR or service template
+    :param csar_or_st_path: Path to TOSCA CSAR or service template
+    :param inputs: TOSCA inputs
+    """
+    if is_zipfile(csar_or_st_path) or Path(csar_or_st_path).is_dir():
+        parse_csar(csar_or_st_path, inputs)
+    else:
+        parse_service_template(csar_or_st_path, inputs)
 
 
 def parse_csar(csar_path: PurePath, inputs: typing.Optional[dict]):
