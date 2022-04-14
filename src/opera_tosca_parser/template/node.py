@@ -61,3 +61,6 @@ class Node:
             if requirement_occurrences[r.name] > max_occurrences:
                 raise DataError(f"Too many occurrences found for requirement '{r.name}'. Maximum is: {max_occurrences}")
             r.resolve(topology)
+
+    def is_a(self, typ):
+        return typ in self.types

@@ -27,3 +27,6 @@ class Relationship:
 
         # This will be set when the relationship is inserted into a topology
         self.topology: Optional[Topology] = None
+
+    def is_a(self, typ):
+        return typ in self.types
