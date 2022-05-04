@@ -95,13 +95,13 @@ def parse_csar(csar_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
         if isinstance(csar, DirCloudServiceArchive):
             workdir = Path(csar_path)
             ast = tosca.load(workdir, entrypoint)
-            return ast.get_template(inputs)
+            return ast.get_template(inputs), workdir
         else:
             with TemporaryDirectory() as csar_validation_dir:
                 csar.unpackage_csar(csar_validation_dir)
                 workdir = Path(csar_validation_dir)
                 ast = tosca.load(workdir, entrypoint)
-                return ast.get_template(inputs)
+                return ast.get_template(inputs), workdir
 
 
 def parse_service_template(service_template_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
@@ -115,4 +115,4 @@ def parse_service_template(service_template_path: PurePath, inputs: typing.Optio
         inputs = {}
     workdir = Path(service_template_path.parent)
     ast = tosca.load(workdir, PurePath(service_template_path.name))
-    return ast.get_template(inputs)
+    return ast.get_template(inputs), workdir
