@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Optional, Dict, Tuple, TYPE_CHECKING
 
+from opera_tosca_parser.error import DataError
+
 if TYPE_CHECKING:
     from opera_tosca_parser.template.topology import Topology
     from opera_tosca_parser.template.interface import Interface
@@ -27,6 +29,18 @@ class Relationship:
 
         # This will be set when the relationship is inserted into a topology
         self.topology: Optional[Topology] = None
+        # This will be set at instantiation time.
+        self._instance = None  # type: ignore
 
     def is_a(self, typ):
         return typ in self.types
+
+    @property
+    def instance(self):
+        if not self._instance:
+            raise DataError(f"Relationship template {self.name} was not instantiated yet")
+        return self._instance
+
+    @instance.setter
+    def instance(self, value):
+        self._instance = value
