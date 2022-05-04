@@ -42,6 +42,8 @@ class Node:
         self.policies: List[Policy] = []
         # This will be set when the node is inserted into a topology.
         self.topology: Optional[Topology] = None
+        # This will be set at instantiation time.
+        self._instance = None  # type: ignore
 
     def resolve_requirements(self, topology: Topology):
         """
@@ -64,3 +66,13 @@ class Node:
 
     def is_a(self, typ):
         return typ in self.types
+
+    @property
+    def instance(self):
+        if not self._instance:
+            raise DataError(f"Node template {self.name} was not instantiated yet")
+        return self._instance
+
+    @instance.setter
+    def instance(self, value):
+        self._instance = value
