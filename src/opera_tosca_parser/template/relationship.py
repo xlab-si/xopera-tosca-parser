@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Dict, Tuple, TYPE_CHECKING
+from typing import Optional, Dict, Tuple, Any, TYPE_CHECKING
 
 from opera_tosca_parser.error import DataError
 
@@ -32,15 +32,28 @@ class Relationship:
         # This will be set at instantiation time.
         self._instance = None  # type: ignore
 
-    def is_a(self, typ):
+    def is_a(self, typ: str) -> bool:
+        """
+        Check whether a relationship is of certain type
+        :param typ: Relationship type
+        """
         return typ in self.types
 
     @property
-    def instance(self):
+    def instance(self) -> Any:
+        """
+        Get instance for this relationship template
+        Raise error if not instantiated
+        :return: Instance
+        """
         if not self._instance:
             raise DataError(f"Relationship template {self.name} was not instantiated yet")
         return self._instance
 
     @instance.setter
-    def instance(self, value):
+    def instance(self, value: Any):
+        """
+        Set instance for this relationship template
+        :param value: Instance
+        """
         self._instance = value

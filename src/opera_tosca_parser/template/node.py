@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import TYPE_CHECKING, Dict, List, Tuple, Optional
+from typing import TYPE_CHECKING, Dict, List, Tuple, Optional, Any
 
 from opera_tosca_parser.error import DataError
 
@@ -64,15 +64,28 @@ class Node:
                 raise DataError(f"Too many occurrences found for requirement '{r.name}'. Maximum is: {max_occurrences}")
             r.resolve(topology)
 
-    def is_a(self, typ):
+    def is_a(self, typ: str) -> bool:
+        """
+        Check whether a node is of certain type
+        :param typ: Node type
+        """
         return typ in self.types
 
     @property
-    def instance(self):
+    def instance(self) -> Any:
+        """
+        Get instance for this node template
+        Raise error if not instantiated
+        :return: Instance
+        """
         if not self._instance:
             raise DataError(f"Node template {self.name} was not instantiated yet")
         return self._instance
 
     @instance.setter
-    def instance(self, value):
+    def instance(self, value: Any):
+        """
+        Set instance for this node template
+        :param value: Instance
+        """
         self._instance = value
