@@ -128,11 +128,11 @@ class PolicyDefinition(CollectorMixin):
                     if str(interface_name) + "." + str(operation_name) == str(call_operation_name):
                         actions_found += 1
 
-                        # override the operation inputs with inputs from trigger's activity definition
-                        operation.inputs = {
+                        # update the operation inputs with inputs from trigger's activity definition
+                        operation.inputs.update({
                             k: [s.data for s in v.data]
                             for k, v in action.get("inputs", {}).items()
-                        }
+                        })
 
                         collected_action = (interface_name, operation_name, operation)
                         break
