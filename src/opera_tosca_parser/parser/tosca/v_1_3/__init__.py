@@ -1,3 +1,3 @@
-from .service_template import ServiceTemplate
+from .definitions.service_template import ServiceTemplate
 
 Parser = ServiceTemplate
