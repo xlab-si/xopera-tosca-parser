@@ -1,7 +1,7 @@
 import argparse
-import typing
 from pathlib import Path, PurePath
 from tempfile import TemporaryDirectory
+from typing import Tuple, Optional
 from zipfile import is_zipfile
 
 import shtab
@@ -9,8 +9,8 @@ import yaml
 
 from opera_tosca_parser.error import OperaToscaParserError, ParseError
 from opera_tosca_parser.parser import tosca
-from opera_tosca_parser.parser.tosca.csar import CloudServiceArchive, DirCloudServiceArchive
-from opera_tosca_parser.template.topology import Topology
+from opera_tosca_parser.parser.tosca.v_1_3.csar import CloudServiceArchive, DirCloudServiceArchive
+from opera_tosca_parser.parser.tosca.v_1_3.template.topology import Topology
 
 
 def add_parser(subparsers: argparse._SubParsersAction):
@@ -64,12 +64,12 @@ def _parser_callback(args: argparse.Namespace) -> int:
     return 0
 
 
-def parse(csar_or_st_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
+def parse(csar_or_st_path: PurePath, inputs: Optional[dict]) -> Tuple[Topology, Path]:
     """
     Parse TOSCA CSAR or service template
     :param csar_or_st_path: Path to TOSCA CSAR or service template
     :param inputs: TOSCA inputs
-    :return: Topology object representing TOSCA CSAR entrypoint or service template
+    :return: Tuple with Topology object representing TOSCA CSAR entrypoint or service template and working directory
     """
     if is_zipfile(csar_or_st_path) or Path(csar_or_st_path).is_dir():
         return parse_csar(csar_or_st_path, inputs)
@@ -77,12 +77,12 @@ def parse(csar_or_st_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
         return parse_service_template(csar_or_st_path, inputs)
 
 
-def parse_csar(csar_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
+def parse_csar(csar_path: PurePath, inputs: Optional[dict]) -> Tuple[Topology, Path]:
     """
     Parse TOSCA CSAR
     :param csar_path: Path to TOSCA CSAR
     :param inputs: TOSCA inputs
-    :return: Topology object representing TOSCA CSAR entrypoint
+    :return: Tuple with Topology object representing TOSCA CSAR entrypoint and working directory
     """
     if inputs is None:
         inputs = {}
@@ -104,12 +104,12 @@ def parse_csar(csar_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
                 return ast.get_template(inputs), workdir
 
 
-def parse_service_template(service_template_path: PurePath, inputs: typing.Optional[dict]) -> Topology:
+def parse_service_template(service_template_path: PurePath, inputs: Optional[dict]) -> Tuple[Topology, Path]:
     """
     Parse TOSCA service template
     :param service_template_path: Path to TOSCA service template
     :param inputs: TOSCA inputs
-    :return: Topology object representing TOSCA service template
+    :return: Tuple with Topology object representing TOSCA service template and working directory
     """
     if inputs is None:
         inputs = {}

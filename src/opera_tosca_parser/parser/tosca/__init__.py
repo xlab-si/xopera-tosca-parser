@@ -1,7 +1,7 @@
 import importlib
 from pathlib import PurePath, Path
 
-from opera_tosca_parser import stdlib
+from opera_tosca_parser.parser.tosca.v_1_3 import stdlib
 from opera_tosca_parser.error import ParseError
 from opera_tosca_parser.parser import yaml
 from opera_tosca_parser.parser.tosca.v_1_3 import Parser
@@ -10,7 +10,7 @@ from opera_tosca_parser.parser.utils.location import Location
 from opera_tosca_parser.parser.yaml.node import Node
 
 SUPPORTED_VERSIONS = dict(
-    tosca_simple_yaml_1_3="v_1_3",
+    tosca_simple_yaml_1_3="v_1_3"
 )
 
 

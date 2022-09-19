@@ -19,7 +19,7 @@ class ArgParser(argparse.ArgumentParser):
         """
         sys.stderr.write(f"error: {message}\n")
         self.print_help()
-        sys.exit(2)
+        sys.exit(1)
 
     def add_subparsers(self, **kwargs) -> argparse._SubParsersAction:
         """
@@ -61,6 +61,17 @@ def create_parser() -> ArgParser:
         description="xOpera TOSCA parser",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
+
+    # use shtab magic and add global optional argument for generating shell completion script
+    shtab.add_argument_to(
+        parser, ["-s", "--shell-completion"],
+        help="Generate tab completion script for your shell"
+    )
+    # add global optional argument for printing current package version
+    parser.add_argument(
+        "--version", "-v", action=PrintCurrentVersionAction, nargs=0, help="Retrieve current opera-tosca-parser version"
+    )
+
     subparsers = parser.add_subparsers()
     cmds = inspect.getmembers(commands, inspect.ismodule)
     for _, module in sorted(cmds, key=lambda x: x[0]):
@@ -74,14 +85,5 @@ def main() -> ArgParser:
     :return: Parser as argparse.ArgumentParser object
     """
     parser = create_parser()
-    # use shtab magic and add global optional argument for generating shell completion script
-    shtab.add_argument_to(
-        parser, ["-s", "--shell-completion"],
-        help="Generate tab completion script for your shell"
-    )
-    # add global optional argument for printing current package version
-    parser.add_argument(
-        "--version", "-v", action=PrintCurrentVersionAction, nargs=0, help="Retrieve current opera-tosca-parser version"
-    )
     args = parser.parse_args()
     return args.func(args)
