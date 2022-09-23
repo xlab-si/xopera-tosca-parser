@@ -7,7 +7,7 @@ opera_tosca_parser_executable="$1"
 # perform an integration test with compressed CSAR
 # prepare the TOSCA CSAR zip file manually
 mkdir -p csar-test
-zip -r test.csar service.yaml modules TOSCA-Metadata
+zip -rqq test.csar service.yaml modules TOSCA-Metadata
 mv test.csar csar-test
 cp inputs.yaml csar-test
 cd csar-test
