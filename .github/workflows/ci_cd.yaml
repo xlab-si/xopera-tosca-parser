@@ -5,14 +5,18 @@ on: push
 jobs:
   tests:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [ '3.8', '3.9', '3.10' ]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.10
+      - name: Setup python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
-          python-version: 3.10.4
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
 
       - name: Install local opera-tosca-parser package
         run: pip install .
