@@ -1,8 +1,9 @@
 # type: ignore
 from typing import Dict, Any, List, Tuple
 
-from opera_tosca_parser.parser.tosca.v_1_3.constants import OperationHost, StandardInterfaceOperation, ConfigureInterfaceOperation
 from opera_tosca_parser.error import DataError
+from opera_tosca_parser.parser.tosca.v_1_3.constants import OperationHost, StandardInterfaceOperation, \
+    ConfigureInterfaceOperation
 from opera_tosca_parser.parser.tosca.v_1_3.template.capability import Capability
 from opera_tosca_parser.parser.tosca.v_1_3.template.interface import Interface
 from opera_tosca_parser.parser.tosca.v_1_3.template.operation import Operation

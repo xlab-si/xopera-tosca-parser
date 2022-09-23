@@ -2,8 +2,8 @@ from typing import Optional, Dict, Any
 
 import yaml
 
-from opera_tosca_parser.parser.yaml.node import Node
 from opera_tosca_parser.parser.tosca.v_1_3.value import Value
+from opera_tosca_parser.parser.yaml.node import Node
 from ..entity import Entity
 from ..map import Map
 from ..path import Path

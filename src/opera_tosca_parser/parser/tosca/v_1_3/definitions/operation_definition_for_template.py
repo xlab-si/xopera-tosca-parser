@@ -1,8 +1,6 @@
 from opera_tosca_parser.parser.yaml.node import Node
 
-from .operation_implementation_definition import (
-    OperationImplementationDefinition,
-)
+from .operation_implementation_definition import OperationImplementationDefinition
 from ..entity import Entity
 from ..list import List
 from ..map import Map

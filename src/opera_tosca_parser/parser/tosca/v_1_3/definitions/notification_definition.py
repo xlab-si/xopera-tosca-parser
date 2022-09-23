@@ -1,6 +1,4 @@
-from .notification_implementation_definition import (
-    NotificationImplementationDefinition,
-)
+from .notification_implementation_definition import NotificationImplementationDefinition
 from ..entity import Entity
 from ..list import List
 from ..map import Map

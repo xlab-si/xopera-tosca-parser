@@ -4,9 +4,9 @@ import pathlib
 from typing import Tuple, Set, Dict
 
 from opera_tosca_parser.parser import yaml
-from opera_tosca_parser.parser.yaml.node import Node
 from opera_tosca_parser.parser.tosca.v_1_3.template.topology import Topology
 from opera_tosca_parser.parser.tosca.v_1_3.value import Value
+from opera_tosca_parser.parser.yaml.node import Node
 from .artifact_type import ArtifactType
 from .capability_type import CapabilityType
 from .data_type import DataType
