@@ -1,7 +1,8 @@
 import pytest
 
 from opera_tosca_parser.error import ParseError
-from opera_tosca_parser.parser.tosca.v_1_3.definitions.notification_implementation_definition import NotificationImplementationDefinition
+from opera_tosca_parser.parser.tosca.v_1_3.definitions.notification_implementation_definition import \
+    NotificationImplementationDefinition
 from opera_tosca_parser.parser.yaml.node import Node
 
 

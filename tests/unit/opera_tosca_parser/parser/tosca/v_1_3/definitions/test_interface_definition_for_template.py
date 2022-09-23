@@ -1,4 +1,5 @@
-from opera_tosca_parser.parser.tosca.v_1_3.definitions.interface_definition_for_template import InterfaceDefinitionForTemplate
+from opera_tosca_parser.parser.tosca.v_1_3.definitions.interface_definition_for_template import \
+    InterfaceDefinitionForTemplate
 
 
 class TestParse:
