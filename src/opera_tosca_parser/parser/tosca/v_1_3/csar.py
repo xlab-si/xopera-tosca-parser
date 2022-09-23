@@ -11,8 +11,8 @@ from zipfile import ZipFile
 import yaml
 
 from opera_tosca_parser.error import ParseError, OperaToscaParserError
+from opera_tosca_parser.parser.utils.helper_functions import determine_archive_format
 from opera_tosca_parser.parser.utils.location import Location
-from opera_tosca_parser.utils import determine_archive_format
 
 
 class CsarMeta:

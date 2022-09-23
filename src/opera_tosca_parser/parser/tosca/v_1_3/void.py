@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import Optional
 
 from opera_tosca_parser.parser.tosca.v_1_3.base import Base
-from opera_tosca_parser.parser.yaml.node import Node
 from opera_tosca_parser.parser.tosca.v_1_3.value import Value
+from opera_tosca_parser.parser.yaml.node import Node
 
 
 class Void(Base):

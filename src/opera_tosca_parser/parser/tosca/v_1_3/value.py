@@ -1,5 +1,4 @@
 import copy
-
 from typing import Optional, Any, Dict
 
 from opera_tosca_parser.error import DataError
