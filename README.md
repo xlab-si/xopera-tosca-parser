@@ -15,7 +15,10 @@ TOSCA YAML parser for xOpera orchestrator.
 
 ## Introduction
 xOpera TOSCA parser aims to be a lightweight parser component compliant with [OASIS TOSCA]. 
-The current compliance is with the [OASIS TOSCA Simple Profile in YAML v1.3].
+The current compliance is with the [TOSCA Simple Profile in YAML v1.3].
+
+*We are also testing experimental support for [TOSCA Version 2.0], which will
+become the main version after TOSCA 2.0 is released.*
 
 ## Prerequisites
 `opera-tosca-parser` requires Python 3 and a virtual environment. 
@@ -68,7 +71,8 @@ Some work from this project has received funding from the European Union’s Hor
 programme under Grant Agreements No. 825040 ([RADON]), No. 825480 ([SODALITE]) and No. 101000162 ([PIACERE]).
 
 [opera-tosca-parser]: https://pypi.org/project/opera-tosca-parser/
-[OASIS TOSCA Simple Profile in YAML v1.3]: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/TOSCA-Simple-Profile-YAML-v1.3.html
+[TOSCA Simple Profile in YAML v1.3]: https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/TOSCA-Simple-Profile-YAML-v1.3.html
+[TOSCA Version 2.0]: https://docs.oasis-open.org/tosca/TOSCA/v2.0/TOSCA-v2.0.html
 [xOpera documentation]: https://xlab-si.github.io/xopera-docs/
 [xopera@xlab.si]: mailto:xopera@xlab.si
 [OASIS TOSCA]: https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca
