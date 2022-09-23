@@ -1,9 +1,9 @@
 import pytest
 
 from opera_tosca_parser.error import ParseError
+from opera_tosca_parser.parser.tosca.v_1_3.definitions.service_template import ServiceTemplate
 from opera_tosca_parser.parser.tosca.v_1_3.reference import DataTypeReferenceWrapper, Reference, ReferenceWrapper
 from opera_tosca_parser.parser.tosca.v_1_3.type import Type
-from opera_tosca_parser.parser.tosca.v_1_3.definitions.service_template import ServiceTemplate
 from opera_tosca_parser.parser.yaml.node import Node
 
 
