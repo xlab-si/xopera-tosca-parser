@@ -11,6 +11,7 @@ from opera_tosca_parser.error import OperaToscaParserError, ParseError
 from opera_tosca_parser.parser import tosca
 from opera_tosca_parser.parser.tosca.v_1_3.csar import CloudServiceArchive, DirCloudServiceArchive
 from opera_tosca_parser.parser.tosca.v_1_3.template.topology import Topology
+from opera_tosca_parser.parser.tosca.v_2_0.csar import CloudServiceArchive as CloudServiceArchive_2_0
 
 
 def add_parser(subparsers: argparse._SubParsersAction):
@@ -87,9 +88,14 @@ def parse_csar(csar_path: PurePath, inputs: Optional[dict]) -> Tuple[Topology, P
     if inputs is None:
         inputs = {}
 
-    csar = CloudServiceArchive.create(csar_path)
-    csar.validate_csar()
-    entrypoint = csar.get_entrypoint()
+    try:
+        csar = CloudServiceArchive.create(csar_path)
+        csar.validate_csar()
+        entrypoint = csar.get_entrypoint()
+    except ParseError:
+        csar = CloudServiceArchive_2_0.create(csar_path)
+        csar.validate_csar()
+        entrypoint = csar.get_entrypoint()
 
     if entrypoint is not None:
         if isinstance(csar, DirCloudServiceArchive):
