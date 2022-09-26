@@ -77,17 +77,20 @@ def load_service_template(base_path: Path, service_template_path: PurePath) -> S
     return service
 
 
-def load_csar(csar_path: PurePath) -> Union[CloudServiceArchive, CloudServiceArchive_2_0]:
+def load_csar(csar_path: PurePath, validate: bool = True) -> Union[CloudServiceArchive, CloudServiceArchive_2_0]:
     """
     Load TOSCA CSAR
     :param csar_path: Path to TOSCA CSAR
+    :param validate: If true it validates TOSCA CSAR, if false validation is skipped
     :return: CloudServiceArchive object
     """
     try:
         csar = CloudServiceArchive.create(csar_path)
-        csar.validate_csar()
+        if validate:
+            csar.validate_csar()
         return csar
     except ParseError:
         csar = CloudServiceArchive_2_0.create(csar_path)
-        csar.validate_csar()
+        if validate:
+            csar.validate_csar()
         return csar
