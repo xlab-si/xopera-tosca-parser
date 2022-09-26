@@ -10,7 +10,7 @@ from zipfile import ZipFile
 
 import yaml
 
-from opera_tosca_parser.error import ParseError, OperaToscaParserError
+from opera_tosca_parser.error import ParseError
 from opera_tosca_parser.parser.utils.helper_functions import determine_archive_format
 from opera_tosca_parser.parser.utils.location import Location
 
@@ -194,7 +194,7 @@ class CloudServiceArchive(ABC):
         elif resolved_path.is_dir():
             return DirCloudServiceArchive(resolved_path)
         else:
-            raise OperaToscaParserError("CSARs are either regular files or directories.")
+            raise ParseError("CSARs are either regular files or directories.", Location(str(path), 0, 0))
 
     @abstractmethod
     def package_csar(self, output_file: str, service_template: str = None, csar_format: str = "zip") -> str:
@@ -264,17 +264,17 @@ class CloudServiceArchive(ABC):
 
         if not contains_meta:
             if not contains_single_root_yaml:
-                raise OperaToscaParserError(
+                raise ParseError(
                     f"When CSAR metadata is not present, there should be exactly one root level YAML file in the root "
-                    f"of the CSAR. Files found: {str(root_yaml_files)}."
+                    f"of the CSAR. Files found: {str(root_yaml_files)}.", Location(str(self.csar_label), 0, 0)
                 )
 
             try:
                 self.parse_service_template_meta(root_yaml_files[0])
             except ParseError as e:
-                raise OperaToscaParserError(
+                raise ParseError(
                     f"When CSAR metadata is not present, the single root level YAML file must contain metadata: "
-                    f"{str(e)}"
+                    f"{str(e)}", Location(str(self.csar_label), 0, 0)
                 ) from e
 
         meta = self.parse_csar_meta()
@@ -282,9 +282,9 @@ class CloudServiceArchive(ABC):
             # check if "Entry-Definitions" points to an existing
             # template file in the CSAR
             if not self._member_exists(PurePath(meta.entry_definitions)):
-                raise OperaToscaParserError(
+                raise ParseError(
                     f"{meta.entry_definitions} defined with Entry-Definitions in {CsarMeta.METADATA_PATH} does not "
-                    f"exist."
+                    f"exist.", Location(str(self.csar_label), 0, 0)
                 )
 
     def parse_csar_meta(self) -> Optional[CsarMeta]:
@@ -504,7 +504,7 @@ class DirCloudServiceArchive(CloudServiceArchive):
         Unpackage DirCloudServiceArchive into uncompressed folder
         :return: Path to compressed TOSCA CSAR
         """
-        raise OperaToscaParserError("Cannot unpackage a directory-based CSAR.")
+        raise ParseError("Cannot unpackage a directory-based CSAR.", Location(str(self.csar_dir), 0, 0))
 
     def members(self) -> List[PurePath]:
         """

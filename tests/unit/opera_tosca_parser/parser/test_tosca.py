@@ -11,14 +11,14 @@ class TestLoad:
         name = pathlib.PurePath("root.yaml")
         (tmp_path / name).write_text("tosca_definitions_version: tosca_simple_yaml_1_3")
 
-        doc = tosca.load(tmp_path, name)
+        doc = tosca.load_service_template(tmp_path, name)
         assert doc.tosca_definitions_version.data == "tosca_simple_yaml_1_3"
 
     def test_empty_document_is_invalid(self, tmp_path):
         name = pathlib.PurePath("empty.yaml")
         (tmp_path / name).write_text("{}")
         with pytest.raises(ParseError):
-            tosca.load(tmp_path, name)
+            tosca.load_service_template(tmp_path, name)
 
     @pytest.mark.parametrize("typ", [
         ("data_types", "tosca.datatypes.xml"),
@@ -36,7 +36,7 @@ class TestLoad:
             "tosca_definitions_version: tosca_simple_yaml_1_3",
         )
 
-        doc = tosca.load(tmp_path, name)
+        doc = tosca.load_service_template(tmp_path, name)
         assert doc.dig(*typ) is not None
 
     @pytest.mark.parametrize("typ", [
@@ -61,7 +61,7 @@ class TestLoad:
             """
         ))
 
-        doc = tosca.load(tmp_path, name)
+        doc = tosca.load_service_template(tmp_path, name)
         assert doc.dig(typ[0], "my.custom.Type") is not None
 
     def test_loads_template_part(self, tmp_path, yaml_text):
@@ -77,7 +77,7 @@ class TestLoad:
             """
         ))
 
-        doc = tosca.load(tmp_path, name)
+        doc = tosca.load_service_template(tmp_path, name)
         assert doc.topology_template.node_templates["my_node"] is not None
 
     def test_load_from_csar_subfolder(self, tmp_path, yaml_text):
@@ -101,7 +101,7 @@ class TestLoad:
             """
         ))
 
-        doc = tosca.load(tmp_path, name)
+        doc = tosca.load_service_template(tmp_path, name)
         assert doc.data_types["my_type"]
 
     def test_duplicate_import(self, tmp_path, yaml_text):
@@ -113,7 +113,7 @@ class TestLoad:
             imports: [ template.yaml ]
             """
         ))
-        tosca.load(tmp_path, name)
+        tosca.load_service_template(tmp_path, name)
 
     def test_imports_from_multiple_levels(self, tmp_path, yaml_text):
         name = pathlib.PurePath("template.yaml")
@@ -145,7 +145,7 @@ class TestLoad:
             """
         ))
 
-        tosca.load(tmp_path, name)
+        tosca.load_service_template(tmp_path, name)
 
     def test_merge_topology_template(self, tmp_path, yaml_text):
         name = pathlib.PurePath("template.yaml")
@@ -177,7 +177,7 @@ class TestLoad:
                   type: tosca.nodes.SoftwareComponent
             """
         ))
-        tosca.load(tmp_path, name)
+        tosca.load_service_template(tmp_path, name)
 
     def test_merge_duplicate_node_templates_invalid(self, tmp_path, yaml_text):
         name = pathlib.PurePath("template.yaml")
@@ -215,7 +215,7 @@ class TestLoad:
             """
         ))
         with pytest.raises(ParseError):
-            tosca.load(tmp_path, name)
+            tosca.load_service_template(tmp_path, name)
 
 
 class TestExecute:
@@ -249,7 +249,7 @@ class TestExecute:
                   type: my_node_type
             """
         ))
-        ast = tosca.load(tmp_path, name)
+        ast = tosca.load_service_template(tmp_path, name)
         with pytest.raises(ParseError, match="Missing a required property: test_property3"):
             ast.get_template({})
 
@@ -277,7 +277,7 @@ class TestExecute:
                   type: my_node_type
             """
         ))
-        ast = tosca.load(tmp_path, name)
+        ast = tosca.load_service_template(tmp_path, name)
         with pytest.raises(ParseError, match="Missing a required property: test_prop3"):
             ast.get_template({})
 
@@ -306,7 +306,7 @@ class TestExecute:
                     property2: 42.0
             """
         ))
-        ast = tosca.load(tmp_path, name)
+        ast = tosca.load_service_template(tmp_path, name)
         with pytest.raises(ParseError, match="Missing a required property: property3"):
             ast.get_template({})
 
@@ -330,6 +330,6 @@ class TestExecute:
                     - dependency_not_defined1: node_2
         """
         ))
-        ast = tosca.load(tmp_path, name)
+        ast = tosca.load_service_template(tmp_path, name)
         with pytest.raises(ParseError, match="Undeclared requirements: dependency_not_defined1"):
             ast.get_template({})

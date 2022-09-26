@@ -7,11 +7,10 @@ from zipfile import is_zipfile
 import shtab
 import yaml
 
-from opera_tosca_parser.error import OperaToscaParserError, ParseError
+from opera_tosca_parser.error import ParseError
 from opera_tosca_parser.parser import tosca
-from opera_tosca_parser.parser.tosca.v_1_3.csar import CloudServiceArchive, DirCloudServiceArchive
+from opera_tosca_parser.parser.tosca.v_1_3.csar import DirCloudServiceArchive
 from opera_tosca_parser.parser.tosca.v_1_3.template.topology import Topology
-from opera_tosca_parser.parser.tosca.v_2_0.csar import CloudServiceArchive as CloudServiceArchive_2_0
 
 
 def add_parser(subparsers: argparse._SubParsersAction):
@@ -58,7 +57,7 @@ def _parser_callback(args: argparse.Namespace) -> int:
     except ParseError as e:
         print(f"{e.loc}: {e}")
         return 1
-    except OperaToscaParserError as e:
+    except Exception as e:
         print(str(e))
         return 1
 
@@ -88,25 +87,19 @@ def parse_csar(csar_path: PurePath, inputs: Optional[dict]) -> Tuple[Topology, P
     if inputs is None:
         inputs = {}
 
-    try:
-        csar = CloudServiceArchive.create(csar_path)
-        csar.validate_csar()
-        entrypoint = csar.get_entrypoint()
-    except ParseError:
-        csar = CloudServiceArchive_2_0.create(csar_path)
-        csar.validate_csar()
-        entrypoint = csar.get_entrypoint()
+    csar = tosca.load_csar(csar_path)
+    entrypoint = csar.get_entrypoint()
 
     if entrypoint is not None:
         if isinstance(csar, DirCloudServiceArchive):
             workdir = Path(csar_path)
-            ast = tosca.load(workdir, entrypoint)
+            ast = tosca.load_service_template(workdir, entrypoint)
             return ast.get_template(inputs), workdir
         else:
             with TemporaryDirectory() as csar_validation_dir:
                 csar.unpackage_csar(csar_validation_dir)
                 workdir = Path(csar_validation_dir)
-                ast = tosca.load(workdir, entrypoint)
+                ast = tosca.load_service_template(workdir, entrypoint)
                 return ast.get_template(inputs), workdir
 
 
@@ -119,6 +112,7 @@ def parse_service_template(service_template_path: PurePath, inputs: Optional[dic
     """
     if inputs is None:
         inputs = {}
+
     workdir = Path(service_template_path.parent)
-    ast = tosca.load(workdir, PurePath(service_template_path.name))
+    ast = tosca.load_service_template(workdir, PurePath(service_template_path.name))
     return ast.get_template(inputs), workdir
